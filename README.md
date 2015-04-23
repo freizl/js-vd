@@ -1,6 +1,6 @@
 # js-vd
 
-visualize js project depends
+Visualize js project depends. All thanks to [madge](https://github.com/pahen/madge).
 
 ## Getting Started
 Install the module with: `npm install -g js-vd`
