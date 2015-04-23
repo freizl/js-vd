@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <title>{{title}}</title>
+        <style>
+          #modules{}
+          #graph { margin-top: 10px; }
+        </style>
+    </head>
+    <body>
+        <h1>{{project}}</h1>
+        <select id="modules" class="pull-left">
+            <option>...</option>
+            {{#topLevelKeys}}
+            <option value="{{{.}}}"><span>{{{.}}}</span></option>
+            {{/topLevelKeys}}
+        </select>
+        <div id="graph" class="pull-left"> </div>
+
+        <script src="http://mdaines.github.io/viz.js/viz.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ramda/0.13.0/ramda.js"></script>
+        <script> var rawData = JSON.parse('{{{datas}}}'); </script>
+        <script>
+         var allKeys = R.keys(rawData),
+             getDep = function (name) {
+                 return R.prop(name, rawData) || R.prop('node_modules/' + name, rawData) || []
+             }
+
+         $('#modules').bind('change', function () {
+             var t = $(this),
+                 val = t.val(),
+                 el,
+                 g
+
+             if (val) {
+                el = $('#graph')
+                g = graphData(val)
+                el.empty().html(g)
+             }
+
+         })
+
+         function graphData (name) {
+            var nodes = [],
+                links = []
+            genNode([name], nodes, links)
+            return genDot(nodes, links)
+         }
+
+         function genNode (names, nodes, links) {
+             R.map(function (n) {
+                 var deps = getDep(n)
+                 nodes.push(n)
+                 R.map(function (d) {
+                     var link = {}
+                     link.source = n
+                     link.target = d
+                     links.push(link)
+                 }, deps)
+
+                 genNode(deps, nodes, links)
+             }, names)
+         }
+
+         function genDot (nodes, links) {
+            var start = ['digraph G {'],
+                end = ['}'],
+                appendComma = function (x) {return '"' + x + '";'},
+                genLink = function (o) { return '"' + o.source + '"' + ' -> ' + '"' + o.target + '"'},
+                xs = R.map(appendComma, nodes),
+                ys = R.uniq(R.map(genLink, links))
+                dots = R.reduce(R.concat, [], [start, xs, ys, end]).join('\r\n')
+
+            return Viz(dots, "svg", "dot")
+
+         }
+
+        </script>
+    </body>
+</html>
