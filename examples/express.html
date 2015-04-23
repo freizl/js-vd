@@ -1,0 +1,87 @@
+<html>
+    <head>
+        <title>JavaScript dependencies Diagrams for express&#x2F;lib</title>
+        <style>
+          #modules{}
+          #graph { margin-top: 10px; }
+        </style>
+    </head>
+    <body>
+        <h1>express&#x2F;lib</h1>
+        <select id="modules" class="pull-left">
+            <option>...</option>
+            <option value="application"><span>application</span></option>
+            <option value="express"><span>express</span></option>
+            <option value="middleware/query"><span>middleware/query</span></option>
+            <option value="request"><span>request</span></option>
+            <option value="response"><span>response</span></option>
+            <option value="router/index"><span>router/index</span></option>
+            <option value="router/layer"><span>router/layer</span></option>
+            <option value="router/route"><span>router/route</span></option>
+            <option value="utils"><span>utils</span></option>
+            <option value="view"><span>view</span></option>
+        </select>
+        <div id="graph" class="pull-left"> </div>
+
+        <script src="http://mdaines.github.io/viz.js/viz.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ramda/0.13.0/ramda.js"></script>
+        <script> var rawData = JSON.parse('{"application":["debug","depd","finalhandler","http","methods","middleware/init","middleware/query","path","router/index","utils","utils-merge","view"],"express":["application","events","merge-descriptors","middleware/query","request","response","router/index","router/route","serve-static"],"middleware/init":[],"middleware/query":["parseurl","qs"],"request":["accepts","depd","fresh","http","net","parseurl","proxy-addr","range-parser","type-is"],"response":["content-disposition","cookie","cookie-signature","depd","escape-html","http","on-finished","path","send","utils","utils-merge","vary"],"router/index":["debug","depd","methods","parseurl","router/layer","router/route","utils","utils-merge"],"router/layer":["debug","path-to-regexp"],"router/route":["debug","methods","router/layer","utils"],"utils":["content-disposition","content-type","depd","etag","path","proxy-addr","qs","querystring","send"],"view":["debug","fs","path","utils"]}'); </script>
+        <script>
+         var allKeys = R.keys(rawData),
+             getDep = function (name) {
+                 return R.prop(name, rawData) || R.prop('node_modules/' + name, rawData) || []
+             }
+
+         $('#modules').bind('change', function () {
+             var t = $(this),
+                 val = t.val(),
+                 el,
+                 g
+
+             if (val) {
+                el = $('#graph')
+                g = graphData(val)
+                el.empty().html(g)
+             }
+
+         })
+
+         function graphData (name) {
+            var nodes = [],
+                links = []
+            genNode([name], nodes, links)
+            return genDot(nodes, links)
+         }
+
+         function genNode (names, nodes, links) {
+             R.map(function (n) {
+                 var deps = getDep(n)
+                 nodes.push(n)
+                 R.map(function (d) {
+                     var link = {}
+                     link.source = n
+                     link.target = d
+                     links.push(link)
+                 }, deps)
+
+                 genNode(deps, nodes, links)
+             }, names)
+         }
+
+         function genDot (nodes, links) {
+            var start = ['digraph G {'],
+                end = ['}'],
+                appendComma = function (x) {return '"' + x + '";'},
+                genLink = function (o) { return '"' + o.source + '"' + ' -> ' + '"' + o.target + '"'},
+                xs = R.map(appendComma, nodes),
+                ys = R.uniq(R.map(genLink, links))
+                dots = R.reduce(R.concat, [], [start, xs, ys, end]).join('\r\n')
+
+            return Viz(dots, "svg", "dot")
+
+         }
+
+        </script>
+    </body>
+</html>
