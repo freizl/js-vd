@@ -8,23 +8,22 @@
     </head>
     <body>
         <h1>{{project}}</h1>
-        <select id="modules" class="pull-left">
+        <select id="modules" class="">
             <option>...</option>
             {{#topLevelKeys}}
             <option value="{{{.}}}"><span>{{{.}}}</span></option>
             {{/topLevelKeys}}
         </select>
-        <div id="graph" class="pull-left"> </div>
+        <div id="graph" class=""> </div>
 
         <script src="http://mdaines.github.io/viz.js/viz.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/ramda/0.13.0/ramda.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ramda/0.13.0/ramda.min.js"></script>
         <script> var rawData = JSON.parse('{{{datas}}}'); </script>
         <script>
-         var allKeys = R.keys(rawData),
-             getDep = function (name) {
-                 return R.prop(name, rawData) || R.prop('node_modules/' + name, rawData) || []
-             }
+         function getDep (name) {
+            return R.prop(name, rawData) || R.prop('node_modules/' + name, rawData) || []
+         }
 
          $('#modules').bind('change', function () {
              var t = $(this),
