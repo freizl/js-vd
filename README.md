@@ -1,6 +1,9 @@
 # js-vd
 
-Visualize js project depends. All thanks to [madge](https://github.com/pahen/madge).
+Visualize js project depends. All thanks to
+
+- [madge](https://github.com/pahen/madge).
+- [viz.js](https://github.com/mdaines/viz.js/)
 
 ## Getting Started
 Install the module with: `npm install -g js-vd`
