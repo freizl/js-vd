@@ -1,6 +1,18 @@
 {
     "name": "js-vd",
-    "description": "visualize js project depends",
+    "description": "Visualize your CommonJS, AMD, or ES6 module dependencies.",
+      "keywords": [
+        "visualize",
+        "dependencies",
+        "AMD",
+        "RequireJS",
+        "require",
+        "graph",
+        "commonjs",
+        "module",
+        "dependency",
+        "es6"
+      ],
     "version": "0.1.1",
     "homepage": "https://github.com/freizl/js-vd",
     "author": {
@@ -33,7 +45,6 @@
         "grunt-contrib-watch": "~0.5.3",
         "grunt": "~0.4.5"
     },
-    "keywords": [],
     "dependencies": {
         "commander": "^2.8.0",
         "madge": "^0.5.0",
