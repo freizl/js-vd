@@ -9,7 +9,8 @@ var fs = require('fs'),
     version = require('../package.json').version,
     program = require('commander'),
     printResult = require(__dirname + '/../node_modules/madge/lib/print'),
-    madge = require('madge');
+    madge = require('madge'),
+    jsvd = require('../lib');
 
 program
     .version(version)
@@ -42,9 +43,9 @@ if (!program.args.length && !program.read && !program.requireConfig) {
 
 var src = program.args;
 
-// Set JSON format by default
+// Set JSON format by default, and use the json result to generate diagram in HTML.
 if (!program.dot && !program.image && !program.json) {
-    program.json = true
+    program.json = true;
 }
 
 // Check config file
@@ -103,14 +104,7 @@ function run() {
             output: program.output
         });
 
-        // Output module dependencies
-    } else if (program.depends) {
-        printResult.depends(res.depends(program.depends), {
-            colors: program.colors,
-            output: program.output
-        });
-
-        // Write image
+        // Output module image
     } else if (program.image) {
         res.image({
             colors: program.colors,
@@ -130,10 +124,8 @@ function run() {
     } else if (program.dot) {
         process.stdout.write(res.dot());
         // Output JSON
-    } else if(program.json) {
-        //process.stdout.write(JSON.stringify(res.tree) + '\n');
-        var main = require('../lib')
-        main(res.tree, program)
+    } else if(program.json || program.depends) {
+        jsvd(res.tree, program);
     } else {
         // Output text (default)
         printResult.list(res.obj(), {
