@@ -11,7 +11,7 @@
         <select id="modules" class="">
             <option>...</option>
             {{#topLevelKeys}}
-            <option value="{{{name}}}" "{{{selected}}}"><span>{{{name}}}</span></option>
+            <option value="{{{name}}}" {{{selected}}}><span>{{{name}}}</span></option>
             {{/topLevelKeys}}
         </select>
         <div id="graph" class=""> </div>
@@ -27,6 +27,8 @@
 
          var m = $('#modules');
          m.bind('change', selectHandler);
+
+         var explicitDep = '{{{dependName}}}';
          if (m.val() !== '...') {
              m.trigger('change');
          }
@@ -71,7 +73,8 @@
             var start = ['digraph G {'],
                 end = ['}'],
                 appendComma = function (x) {return '"' + x + '";'},
-                genLink = function (o) { return '"' + o.source + '"' + ' -> ' + '"' + o.target + '"'},
+                reverseArrow = !!explicitDep ? ' [dir=back]' : '';
+                genLink = function (o) { return '"' + o.source + '"' + ' -> ' + '"' + o.target + '"' + reverseArrow},
                 xs = R.map(appendComma, nodes),
                 ys = R.uniq(R.map(genLink, links))
                 dots = R.reduce(R.concat, [], [start, xs, ys, end]).join('\r\n')
