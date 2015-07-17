@@ -38,7 +38,6 @@
          $('#graph').delegate('.node', 'click', function () {
              var that = $(this),
                  val = that.find('text').text();
-             console.log(that, val);
              $('#modules').val(val)
                           .change();
          });
