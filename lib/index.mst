@@ -11,7 +11,7 @@
         <select id="modules" class="">
             <option>...</option>
             {{#topLevelKeys}}
-            <option value="{{{name}}}" selected="{{{selected}}}"><span>{{{name}}}</span></option>
+            <option value="{{{name}}}" "{{{selected}}}"><span>{{{name}}}</span></option>
             {{/topLevelKeys}}
         </select>
         <div id="graph" class=""> </div>
