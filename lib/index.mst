@@ -4,6 +4,8 @@
         <style>
           #modules{}
           #graph { margin-top: 10px; }
+          .node:hover { cursor: pointer; }
+          .node:hover ellipse { fill: grey; }
         </style>
     </head>
     <body>
@@ -30,8 +32,16 @@
 
          var explicitDep = '{{{dependName}}}';
          if (m.val() !== '...') {
-             m.trigger('change');
+             m.change();
          }
+
+         $('#graph').delegate('.node', 'click', function () {
+             var that = $(this),
+                 val = that.find('text').text();
+             console.log(that, val);
+             $('#modules').val(val)
+                          .change();
+         });
 
          function selectHandler () {
              var t = $(this),
