@@ -11,7 +11,7 @@
         <select id="modules" class="">
             <option>...</option>
             {{#topLevelKeys}}
-            <option value="{{{.}}}"><span>{{{.}}}</span></option>
+            <option value="{{{name}}}" selected="{{{selected}}}"><span>{{{name}}}</span></option>
             {{/topLevelKeys}}
         </select>
         <div id="graph" class=""> </div>
@@ -25,7 +25,13 @@
             return R.prop(name, rawData) || R.prop('node_modules/' + name, rawData) || []
          }
 
-         $('#modules').bind('change', function () {
+         var m = $('#modules');
+         m.bind('change', selectHandler);
+         if (m.val() !== '...') {
+             m.trigger('change');
+         }
+
+         function selectHandler () {
              var t = $(this),
                  val = t.val(),
                  el,
@@ -37,7 +43,7 @@
                 el.empty().html(g)
              }
 
-         })
+         }
 
          function graphData (name) {
             var nodes = [],
