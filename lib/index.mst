@@ -16,56 +16,105 @@
             <option value="{{{name}}}" {{{selected}}}><span>{{{name}}}</span></option>
             {{/topLevelKeys}}
         </select>
+        <input id="reverse-deps" type="checkbox" /><label>Reverse Depends</label>
+        <span id="loading" style="display: none; color: red;">LOADING...</span>
+
         <div id="graph" class=""> </div>
 
         <script src="http://mdaines.github.io/viz.js/viz.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ramda/0.13.0/ramda.min.js"></script>
-        <script> var rawData = JSON.parse('{{{datas}}}'); </script>
         <script>
-         function getDep (name) {
-            return R.prop(name, rawData) || R.prop('node_modules/' + name, rawData) || []
-         }
+           var rawData = JSON.parse('{{{datas}}}');
+           var explicitDep = '{{{dependName}}}';
+        </script>
+        <script>
 
-         var m = $('#modules');
-         m.bind('change', selectHandler);
 
-         var explicitDep = '{{{dependName}}}';
+         var m = $('#modules'),
+             rd = $('#reverse-deps');
+
+         m.bind('change', actionHandler);
+         rd.bind('change', actionHandler);
+         $('#graph').delegate('.node', 'click', function () {
+             var that = $(this),
+                 val = that.find('text').text();
+
+             if (rawData[val]) {
+                 $('#modules').val(val)
+                              .change();
+             } else {
+                 $('#graph').html('<h3>ERROR: dont have module: ' + val + '</h3>');
+             }
+
+         });
+
          if (m.val() !== '...') {
              m.change();
          }
 
-         $('#graph').delegate('.node', 'click', function () {
-             var that = $(this),
-                 val = that.find('text').text();
-             $('#modules').val(val)
-                          .change();
-         });
-
-         function selectHandler () {
-             var t = $(this),
-                 val = t.val(),
-                 el,
-                 g
-
-             if (val) {
-                el = $('#graph')
-                g = graphData(val)
-                el.empty().html(g)
-             }
-
+         function actionHandler () {
+             genDiagram($('#modules').val(), $('#reverse-deps').is(':checked'));
          }
 
-         function graphData (name) {
+         function genDiagram (selectVal, reverseDep) {
+             var treeData = rawData,
+                 el = $('#graph'),
+                 loading = $('#loading'),
+                 g;
+
+             loading.show();
+
+             if (selectVal !== '...') {
+                 if (reverseDep) {
+                     treeData = genDependReverseTree(treeData, selectVal);
+                 }
+                 g = graphData(selectVal, treeData);
+                 loading.hide();
+                 el.empty().html(g);
+             }
+         }
+
+         function dependOf(treeData, name) {
+           var getVal = R.prop(R.__, treeData),
+           hasDepends = R.compose(R.contains(name), getVal),
+           keys = R.keys(treeData);
+
+           return R.filter(hasDepends, keys);
+         }
+
+         /**
+         * an reversed tree with the specified @depName@ as top.
+         */
+         function genDependReverseTree(treeData, depName) {
+             var ds = dependOf(treeData, depName),
+             dTree = {};
+
+             dTree[depName] = ds;
+
+             if (R.isEmpty(ds)) {
+                 return dTree;
+             } else {
+                 var deeperDeps = R.map(R.curry(genDependReverseTree)(treeData), ds),
+                 allDeps = deeperDeps.concat(dTree);
+                 return R.mergeAll(allDeps);
+             }
+         }
+
+         function getDep (name, treeData) {
+            return R.prop(name, treeData) || R.prop('node_modules/' + name, treeData) || []
+         }
+
+         function graphData (name, treeData) {
             var nodes = [],
                 links = []
-            genNode([name], nodes, links)
+            genNode([name], nodes, links, treeData)
             return genDot(nodes, links)
          }
 
-         function genNode (names, nodes, links) {
+         function genNode (names, nodes, links, treeData) {
              R.map(function (n) {
-                 var deps = getDep(n)
+                 var deps = getDep(n, treeData)
                  nodes.push(n)
                  R.map(function (d) {
                      var link = {}
@@ -74,7 +123,7 @@
                      links.push(link)
                  }, deps)
 
-                 genNode(deps, nodes, links)
+                 genNode(deps, nodes, links, treeData)
              }, names)
          }
 
@@ -82,16 +131,14 @@
             var start = ['digraph G {'],
                 end = ['}'],
                 appendComma = function (x) {return '"' + x + '";'},
-                reverseArrow = !!explicitDep ? ' [dir=back]' : '';
+                reverseArrow = $('#reverse-deps').is(':checked') ? ' [dir=back]' : '';
                 genLink = function (o) { return '"' + o.source + '"' + ' -> ' + '"' + o.target + '"' + reverseArrow},
                 xs = R.map(appendComma, nodes),
                 ys = R.uniq(R.map(genLink, links))
                 dots = R.reduce(R.concat, [], [start, xs, ys, end]).join('\r\n')
 
             return Viz(dots, "svg", "dot")
-
          }
-
         </script>
     </body>
 </html>
