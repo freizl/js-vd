@@ -17,7 +17,6 @@
             {{/topLevelKeys}}
         </select>
         <input id="reverse-deps" type="checkbox" /><label>Reverse Depends</label>
-        <span id="loading" style="display: none; color: red;">LOADING...</span>
 
         <div id="graph" class=""> </div>
 
@@ -29,9 +28,7 @@
            var reverseDeps = {{{reverseDeps}}};
         </script>
         <script>
-
-
-         var m = $('#modules'),
+          var m = $('#modules'),
              rd = $('#reverse-deps');
 
          m.bind('change', actionHandler);
@@ -63,18 +60,25 @@
          function genDiagram (selectVal, reverseDep) {
              var treeData = rawData,
                  el = $('#graph'),
-                 loading = $('#loading'),
-                 g;
+                 dots;
 
-             loading.show();
+             el.html('<h3>LOADING...</h3>');
 
              if (selectVal !== '...') {
                  if (reverseDep) {
                      treeData = genDependReverseTree(treeData, selectVal);
                  }
-                 g = graphData(selectVal, treeData);
-                 loading.hide();
-                 el.empty().html(g);
+
+                 dots = graphData(selectVal, treeData);
+
+                 // Viz takes times synchronizedly !!
+                 setTimeout(function () {
+                     console.time('renderTree');
+                     var g = Viz(dots, "svg", "dot");
+                     $('#graph').html(g);
+                     console.timeEnd('renderTree');
+                 }, 0)
+
              }
          }
 
@@ -90,8 +94,14 @@
          * an reversed tree with the specified @depName@ as top.
          */
          function genDependReverseTree(treeData, depName) {
+             if (!genDependReverseTree.cache) {
+                 genDependReverseTree.cache = {};
+             }
+             if (genDependReverseTree.cache[depName]) {
+                 return genDependReverseTree.cache[depName]
+             }
              var ds = dependOf(treeData, depName),
-             dTree = {};
+                 dTree = {};
 
              dTree[depName] = ds;
 
@@ -99,8 +109,10 @@
                  return dTree;
              } else {
                  var deeperDeps = R.map(R.curry(genDependReverseTree)(treeData), ds),
-                 allDeps = deeperDeps.concat(dTree);
-                 return R.mergeAll(allDeps);
+                     allDeps = deeperDeps.concat(dTree),
+                     result = R.mergeAll(allDeps);
+                 genDependReverseTree.cache[depName] = result;
+                 return result
              }
          }
 
@@ -109,24 +121,31 @@
          }
 
          function graphData (name, treeData) {
-            var nodes = [],
-                links = []
-            genNode([name], nodes, links, treeData)
-            return genDot(nodes, links)
+             var nodes = [],
+                 links = [];
+
+             genNode.cache = {};
+             genNode([name], nodes, links, treeData)
+             return genDot(nodes, links)
          }
 
          function genNode (names, nodes, links, treeData) {
              R.map(function (n) {
-                 var deps = getDep(n, treeData)
-                 nodes.push(n)
-                 R.map(function (d) {
-                     var link = {}
-                     link.source = n
-                     link.target = d
-                     links.push(link)
-                 }, deps)
+                 if (!genNode.cache[n]){
+                     var deps = getDep(n, treeData),
+                         ls = R.map(function (d) {
+                             var link = {}
+                             link.source = n
+                             link.target = d
+                             return link;
+                         }, deps);
+                     nodes.push(n);
+                     //links = links.concat(ls); ??
+                     R.map(function (l) { links.push(l);}, ls);
 
-                 genNode(deps, nodes, links, treeData)
+                     genNode.cache[n] = ls;
+                     genNode(deps, nodes, links, treeData)
+                 }
              }, names)
          }
 
@@ -136,11 +155,11 @@
                 appendComma = function (x) {return '"' + x + '";'},
                 reverseArrow = $('#reverse-deps').is(':checked') ? ' [dir=back]' : '';
                 genLink = function (o) { return '"' + o.source + '"' + ' -> ' + '"' + o.target + '"' + reverseArrow},
-                xs = R.map(appendComma, nodes),
+                xs = R.uniq(R.map(appendComma, nodes)),
                 ys = R.uniq(R.map(genLink, links))
                 dots = R.reduce(R.concat, [], [start, xs, ys, end]).join('\r\n')
 
-            return Viz(dots, "svg", "dot")
+            return dots;
          }
         </script>
     </body>
