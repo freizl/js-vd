@@ -2,7 +2,7 @@
 
 Visualize js project depends. All thanks to
 
-- [madge](https://github.com/pahen/madge).
+- [madge](https://github.com/pahen/madge)
 - [viz.js](https://github.com/mdaines/viz.js/)
 
 ## Getting Started
@@ -20,12 +20,6 @@ then open the result html
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
-
-## Documentation
-_(TBD)_
-
-## Release History
-_(TBD)_
 
 ## License
 Copyright (c) 2015 Haisheng.Wu
