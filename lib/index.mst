@@ -4,10 +4,10 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
 
         <style>
-         #modules{}
          #graph { margin-top: 10px; }
          .node:hover { cursor: pointer; }
-         .node:hover ellipse { fill: grey; }
+         .node:hover ellipse { fill: #3875d7; }
+         .node:hover text { fill: #FFF; }
          footer {
              font-size: 10px;
              color: grey;
