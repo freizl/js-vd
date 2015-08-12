@@ -1,154 +1,201 @@
 <html>
     <head>
-        <title>JavaScript dependencies Diagrams for &#x2F;Users&#x2F;haisheng.wu&#x2F;Downloads&#x2F;github.com&#x2F;express&#x2F;lib&#x2F;</title>
+        <title>JavaScript dependencies Diagrams for express&#x2F;lib</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
+
         <style>
-          #modules{}
-          #graph { margin-top: 10px; }
-          .node:hover { cursor: pointer; }
-          .node:hover ellipse { fill: grey; }
+         #graph { margin-top: 10px; }
+         .node:hover { cursor: pointer; }
+         .node:hover ellipse { fill: #3875d7; }
+         .node:hover text { fill: #FFF; }
+         footer {
+             font-size: 10px;
+             color: grey;
+             text-align: center;
+         }
         </style>
     </head>
     <body>
-        <h1>&#x2F;Users&#x2F;haisheng.wu&#x2F;Downloads&#x2F;github.com&#x2F;express&#x2F;lib&#x2F;</h1>
-        <select id="modules" class="">
-            <option>...</option>
-            <option value="application" ><span>application</span></option>
-            <option value="express" ><span>express</span></option>
-            <option value="middleware/query" ><span>middleware/query</span></option>
-            <option value="request" ><span>request</span></option>
-            <option value="response" ><span>response</span></option>
-            <option value="router/index" ><span>router/index</span></option>
-            <option value="router/layer" ><span>router/layer</span></option>
-            <option value="router/route" ><span>router/route</span></option>
-            <option value="utils" ><span>utils</span></option>
-            <option value="view" ><span>view</span></option>
+        <h1>express&#x2F;lib</h1>
+        <select id="modules" class="chosen-select" data-placeholder="Choose a Module...">
+            <option></option>
+            <option value="application" >application</option>
+            <option value="express" >express</option>
+            <option value="middleware/query" >middleware/query</option>
+            <option value="request" >request</option>
+            <option value="response" >response</option>
+            <option value="router/index" >router/index</option>
+            <option value="router/layer" >router/layer</option>
+            <option value="router/route" >router/route</option>
+            <option value="utils" >utils</option>
+            <option value="view" >view</option>
         </select>
         <input id="reverse-deps" type="checkbox" /><label>Reverse Depends</label>
-        <span id="loading" style="display: none; color: red;">LOADING...</span>
 
         <div id="graph" class=""> </div>
 
         <script src="http://mdaines.github.io/viz.js/viz.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ramda/0.13.0/ramda.min.js"></script>
         <script>
-           var rawData = JSON.parse('{"application":["array-flatten","debug","depd","finalhandler","http","methods","middleware/init","middleware/query","path","router/index","utils","utils-merge","view"],"express":["application","events","merge-descriptors","middleware/query","request","response","router/index","router/route","serve-static"],"middleware/init":[],"middleware/query":["parseurl","qs"],"request":["accepts","depd","fresh","http","net","parseurl","proxy-addr","range-parser","type-is"],"response":["content-disposition","cookie","cookie-signature","depd","escape-html","http","on-finished","path","send","utils","utils-merge","vary"],"router/index":["array-flatten","debug","depd","methods","parseurl","router/layer","router/route","utils-merge"],"router/layer":["debug","path-to-regexp"],"router/route":["array-flatten","debug","methods","router/layer"],"utils":["array-flatten","content-disposition","content-type","depd","etag","path","proxy-addr","qs","querystring","send"],"view":["debug","fs","path","utils"]}');
-           var reverseDeps = false;
+         $('#modules').chosen({search_contains: true});
+
+         var rawData = JSON.parse('{"application":["array-flatten","debug","depd","finalhandler","http","methods","middleware/init","middleware/query","path","router/index","utils","utils-merge","view"],"express":["application","events","merge-descriptors","middleware/query","request","response","router/index","router/route","serve-static"],"middleware/init":[],"middleware/query":["parseurl","qs"],"request":["accepts","depd","fresh","http","net","parseurl","proxy-addr","range-parser","type-is"],"response":["content-disposition","cookie","cookie-signature","depd","escape-html","http","on-finished","path","send","utils","utils-merge","vary"],"router/index":["array-flatten","debug","depd","methods","parseurl","router/layer","router/route","utils-merge"],"router/layer":["debug","path-to-regexp"],"router/route":["array-flatten","debug","methods","router/layer"],"utils":["array-flatten","content-disposition","content-type","depd","etag","path","proxy-addr","qs","querystring","send"],"view":["debug","fs","path","utils"]}');
+         var reverseDeps = false;
         </script>
         <script>
+         /* jshint maxstatements:20 */
+/* global $:false */
+/* global R:false */
+/* global Viz:false */
+/* global console:false */
+/* global rawData:false */
+/* global reverseDeps:false */
 
+(function (R, Viz, $, rawData, reverseDeps) {
 
-         var m = $('#modules'),
-             rd = $('#reverse-deps');
+  function actionHandler() {
+    genDiagram($('#modules').val(), $('#reverse-deps').is(':checked'));
+  }
 
-         m.bind('change', actionHandler);
-         rd.bind('change', actionHandler);
-         $('#graph').delegate('.node', 'click', function () {
-             var that = $(this),
-                 val = that.find('text').text();
+  function genDiagram(selectVal, reverseDep) {
+    var treeData = rawData,
+        el = $('#graph'),
+        dots;
 
-             if (rawData[val]) {
-                 $('#modules').val(val)
-                              .change();
-             } else {
-                 $('#graph').html('<h3>ERROR: dont have module: ' + val + '</h3>');
-             }
+    el.html('<h3>LOADING...</h3>');
 
-         });
+    if (selectVal !== '...') {
+      if (reverseDep) {
+        treeData = genDependReverseTree(treeData, selectVal);
+      }
 
-         if (reverseDeps) {
-             rd.prop('checked', true);
-         }
-         if (m.val() !== '...') {
-             m.change();
-         }
+      dots = graphData(selectVal, treeData);
 
-         function actionHandler () {
-             genDiagram($('#modules').val(), $('#reverse-deps').is(':checked'));
-         }
+      // Viz takes times synchronizedly !!
+      setTimeout(function () {
+        console.time('renderTree');
+        var g = Viz(dots, "svg", "dot");
+        $('#graph').html(g);
+        console.timeEnd('renderTree');
+      }, 0);
 
-         function genDiagram (selectVal, reverseDep) {
-             var treeData = rawData,
-                 el = $('#graph'),
-                 loading = $('#loading'),
-                 g;
+    }
+  }
 
-             loading.show();
+  function dependOf(treeData, name) {
+    var getVal = R.prop(R.__, treeData),
+        hasDepends = R.compose(R.contains(name), getVal),
+        keys = R.keys(treeData);
 
-             if (selectVal !== '...') {
-                 if (reverseDep) {
-                     treeData = genDependReverseTree(treeData, selectVal);
-                 }
-                 g = graphData(selectVal, treeData);
-                 loading.hide();
-                 el.empty().html(g);
-             }
-         }
+    return R.filter(hasDepends, keys);
+  }
 
-         function dependOf(treeData, name) {
-           var getVal = R.prop(R.__, treeData),
-           hasDepends = R.compose(R.contains(name), getVal),
-           keys = R.keys(treeData);
+  /**
+   * an reversed tree with the specified @depName@ as top.
+   */
+  function genDependReverseTree(treeData, depName) {
+    if (!genDependReverseTree.cache) {
+      genDependReverseTree.cache = {};
+    }
+    if (genDependReverseTree.cache[depName]) {
+      return genDependReverseTree.cache[depName];
+    }
+    var ds = dependOf(treeData, depName),
+        dTree = {};
 
-           return R.filter(hasDepends, keys);
-         }
+    dTree[depName] = ds;
 
-         /**
-         * an reversed tree with the specified @depName@ as top.
-         */
-         function genDependReverseTree(treeData, depName) {
-             var ds = dependOf(treeData, depName),
-             dTree = {};
+    if (R.isEmpty(ds)) {
+      return dTree;
+    } else {
+      var deeperDeps = R.map(R.curry(genDependReverseTree)(treeData), ds),
+          allDeps = deeperDeps.concat(dTree),
+          result = R.mergeAll(allDeps);
+      genDependReverseTree.cache[depName] = result;
+      return result;
+    }
+  }
 
-             dTree[depName] = ds;
+  function getDep(name, treeData) {
+    return R.prop(name, treeData) || R.prop('node_modules/' + name, treeData) || [];
+  }
 
-             if (R.isEmpty(ds)) {
-                 return dTree;
-             } else {
-                 var deeperDeps = R.map(R.curry(genDependReverseTree)(treeData), ds),
-                 allDeps = deeperDeps.concat(dTree);
-                 return R.mergeAll(allDeps);
-             }
-         }
+  function graphData(name, treeData) {
+    var nodes = [],
+        links = [];
 
-         function getDep (name, treeData) {
-            return R.prop(name, treeData) || R.prop('node_modules/' + name, treeData) || []
-         }
+    genNode.cache = {};
+    genNode([name], nodes, links, treeData);
+    return genDot(nodes, links);
+  }
 
-         function graphData (name, treeData) {
-            var nodes = [],
-                links = []
-            genNode([name], nodes, links, treeData)
-            return genDot(nodes, links)
-         }
+  function genNode(names, nodes, links, treeData) {
+    R.map(function (n) {
+      if (!genNode.cache[n]) {
+        var deps = getDep(n, treeData),
+            ls = R.map(function (d) { return {source: n, target: d}; }, deps);
+        nodes.push(n);
+        // links is "global" defined at graphData function hence have to change in place.
+        R.map(function (l) { links.push(l); }, ls);
 
-         function genNode (names, nodes, links, treeData) {
-             R.map(function (n) {
-                 var deps = getDep(n, treeData)
-                 nodes.push(n)
-                 R.map(function (d) {
-                     var link = {}
-                     link.source = n
-                     link.target = d
-                     links.push(link)
-                 }, deps)
+        genNode.cache[n] = ls;
+        genNode(deps, nodes, links, treeData);
+      }
+    }, names);
+  }
 
-                 genNode(deps, nodes, links, treeData)
-             }, names)
-         }
+  function genDot(nodes, links) {
+    var start = ['digraph G {'],
+        end = ['}'],
+        appendComma = function (x) {return '"' + x + '";'; },
+        reverseArrow = $('#reverse-deps').is(':checked') ? ' [dir=back]' : '',
+        genLink = function (o) { return '"' + o.source + '"' + ' -> ' + '"' + o.target + '"' + reverseArrow; },
+        xs = R.uniq(R.map(appendComma, nodes)),
+        ys = R.uniq(R.map(genLink, links)),
+        dots = R.reduce(R.concat, [], [start, xs, ys, end]).join('\r\n');
 
-         function genDot (nodes, links) {
-            var start = ['digraph G {'],
-                end = ['}'],
-                appendComma = function (x) {return '"' + x + '";'},
-                reverseArrow = $('#reverse-deps').is(':checked') ? ' [dir=back]' : '';
-                genLink = function (o) { return '"' + o.source + '"' + ' -> ' + '"' + o.target + '"' + reverseArrow},
-                xs = R.map(appendComma, nodes),
-                ys = R.uniq(R.map(genLink, links))
-                dots = R.reduce(R.concat, [], [start, xs, ys, end]).join('\r\n')
+    return dots;
+  }
 
-            return Viz(dots, "svg", "dot")
-         }
+  function nodeClickHandler() {
+    var that = $(this),
+        val = that.find('text').text();
+
+    if (rawData[val]) {
+      $('#modules').val(val)
+        .change();
+    } else {
+      $('#graph').html('<h3>ERROR: dont have module: ' + val + '</h3>');
+    }
+
+  }
+
+  function main() {
+    var m = $('#modules'),
+        rd = $('#reverse-deps');
+
+    m.bind('change', actionHandler);
+    rd.bind('change', actionHandler);
+    $('#graph').delegate('.node', 'click', nodeClickHandler);
+
+    if (reverseDeps) {
+      rd.prop('checked', true);
+    }
+    if (m.val()) {
+      m.change();
+    }
+  }
+
+  main();
+
+})(R, Viz, $, rawData, reverseDeps);
+
         </script>
+
+        <footer>
+            Generated by <a href="https://www.npmjs.com/package/js-vd">js-vd</a>
+        </footer>
     </body>
 </html>
