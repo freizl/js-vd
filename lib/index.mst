@@ -26,8 +26,7 @@
         <input id="reverse-deps" type="checkbox" /><label>Reverse Depends</label>
 
         <div id="graph" class=""> </div>
-
-        <script src="http://mdaines.github.io/viz.js/viz.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/0.0.3/viz.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ramda/0.13.0/ramda.min.js"></script>
