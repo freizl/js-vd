@@ -13,7 +13,7 @@ All thanks to
 Install the module with: `npm install -g js-vd`
 
 ## Examples
-- [Express project](http://freizl.github.io/ftp/js-vd/express.html)
+- [Express project](http://freizl.github.io/ftp/js-vd/index.html)
 
 Or generate for your own project
 
