@@ -19,7 +19,7 @@ Install the module with: `npm install -g js-vd`
 
 then open the result html
 
-- See the result page generated for expressjs project at `examples/express.html`
+- See the result page generated for expressjs project at `examples/express.html` or at [here](http://freizl.github.io/ftp/js-vd/express.html)
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
