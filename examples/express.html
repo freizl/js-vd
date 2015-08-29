@@ -1,9 +1,10 @@
+<!DOCTYPE html>
 <html>
     <head>
-        <title>JavaScript dependencies Diagrams for express&#x2F;lib</title>
+        <title>JavaScript dependencies Diagrams for &#x2F;Users&#x2F;haisheng.wu&#x2F;Downloads&#x2F;github.com&#x2F;express&#x2F;lib</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
 
-        <style>
+        <style type="text/css">
          #graph { margin-top: 10px; }
          .node:hover { cursor: pointer; }
          .node:hover ellipse { fill: #3875d7; }
@@ -13,10 +14,11 @@
              color: grey;
              text-align: center;
          }
+         .pointer { cursor: pointer; }
         </style>
     </head>
     <body>
-        <h1>express&#x2F;lib</h1>
+        <h1>&#x2F;Users&#x2F;haisheng.wu&#x2F;Downloads&#x2F;github.com&#x2F;express&#x2F;lib</h1>
         <select id="modules" class="chosen-select" data-placeholder="Choose a Module...">
             <option></option>
             <option value="application" >application</option>
@@ -30,11 +32,11 @@
             <option value="utils" >utils</option>
             <option value="view" >view</option>
         </select>
-        <input id="reverse-deps" type="checkbox" /><label>Reverse Depends</label>
+        <input class="pointer" id="reverse-deps" type="checkbox" />
+        <label class="pointer" for="reverse-deps">Reverse Depends</label>
 
         <div id="graph" class=""> </div>
-
-        <script src="http://mdaines.github.io/viz.js/viz.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/0.0.3/viz.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ramda/0.13.0/ramda.min.js"></script>
@@ -53,7 +55,7 @@
 /* global rawData:false */
 /* global reverseDeps:false */
 
-(function (R, Viz, $, rawData, reverseDeps) {
+(function (R, viz, $, rawData, reverseDeps) {
 
   function actionHandler() {
     genDiagram($('#modules').val(), $('#reverse-deps').is(':checked'));
@@ -76,7 +78,7 @@
       // Viz takes times synchronizedly !!
       setTimeout(function () {
         console.time('renderTree');
-        var g = Viz(dots, "svg", "dot");
+        var g = viz(dots, "svg", "dot");
         $('#graph').html(g);
         console.timeEnd('renderTree');
       }, 0);
@@ -164,8 +166,10 @@
         val = that.find('text').text();
 
     if (rawData[val]) {
-      $('#modules').val(val)
-        .change();
+      $('#modules')
+        .val(val).change()
+        .trigger('chosen:updated');
+
     } else {
       $('#graph').html('<h3>ERROR: dont have module: ' + val + '</h3>');
     }
