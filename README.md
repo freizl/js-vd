@@ -13,7 +13,7 @@ All thanks to
 Install the module with: `npm install -g js-vd`
 
 ## Examples
-- http://freizl.github.io/ftp/js-vd/index.html
+- http://freizl.github.io/apps/js-vd/index.html
 
 Or generate for your own project
 
