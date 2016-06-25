@@ -3,16 +3,22 @@
 
 # js-vd
 
-Visualize JavaScript source code dependency as an tree view. 
+Visualize JavaScript source code dependency as an tree view.
 All thanks to
 
 - [madge](https://github.com/pahen/madge)
 - [viz.js](https://github.com/mdaines/viz.js/)
 
 ## Getting Started
+
 Install the module with: `npm install -g js-vd`
 
+## Quick Demo
+
+- ![Demo](./examples/dome.gif)
+
 ## Examples
+
 - http://freizl.github.io/apps/js-vd/index.html
 
 Or generate for your own project
