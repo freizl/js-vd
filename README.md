@@ -15,7 +15,7 @@ Install the module with: `npm install -g js-vd`
 
 ## Quick Demo
 
-- ![Demo](./examples/dome.gif)
+- ![Demo](./examples/demo.gif)
 
 ## Examples
 
