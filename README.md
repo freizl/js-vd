@@ -37,5 +37,5 @@ Type `vd --help` or [view the source](https://github.com/freizl/js-vd/blob/maste
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## License
-Copyright (c) 2015 Haisheng.Wu
+Copyright (c) 2015-2016 Haisheng.Wu
 Licensed under the MIT license.
