@@ -1,5 +1,5 @@
 [![NPM](https://nodei.co/npm/js-vd.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/js-vd/)
-[![NPM](https://nodei.co/npm-dl/js-vd.png?height=3)](https://nodei.co/npm/js-vd/)
+[![NPM](https://nodei.co/npm-dl/js-vd.png?height=2)](https://nodei.co/npm/js-vd/)
 
 # js-vd
 
