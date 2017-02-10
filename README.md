@@ -40,5 +40,5 @@ Type `vd --help` or [view the source](https://github.com/freizl/js-vd/blob/maste
 - unit test
 
 ## License
-Copyright (c) 2015-2016 Haisheng.Wu
-Licensed under the MIT license.
+
+- see LICENSE file
