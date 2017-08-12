@@ -8,7 +8,7 @@
 var fs = require('fs'),
     version = require('../package.json').version,
     program = require('commander'),
-    printResult = require(__dirname + '/../node_modules/madge/lib/print'),
+    printResult = require(__dirname + '/../node_modules/madge/lib/output'),
     madge = require('madge'),
     jsvd = require('../lib');
 
