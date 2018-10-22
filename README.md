@@ -1,5 +1,4 @@
-[![NPM](https://nodei.co/npm/js-vd.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/js-vd/)
-[![NPM](https://nodei.co/npm-dl/js-vd.png?height=2)](https://nodei.co/npm/js-vd/)
+[![npm version](https://img.shields.io/npm/v/@freizl/jsvd.svg?style=flat-square)](https://www.npmjs.com/package/@freizl/jsvd)
 
 # js-vd
 
