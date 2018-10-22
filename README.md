@@ -11,7 +11,7 @@ All thanks to
 
 ## Getting Started
 
-Install the module with: `npm install -g js-vd`
+Install the module with: `npm install -g @freizl/jsvd`
 
 ## Quick Demo
 

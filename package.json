@@ -1,5 +1,5 @@
 {
-    "name": "js-vd",
+    "name": "@freizl/jsvd",
     "description": "Visualize your CommonJS, AMD, or ES6 module dependencies.",
     "keywords": [
         "visualize",
@@ -13,7 +13,7 @@
         "dependency",
         "es6"
     ],
-    "version": "0.3.0",
+    "version": "1.0.0",
     "homepage": "https://github.com/freizl/js-vd",
     "author": {
         "name": "Haisheng.Wu",
@@ -38,7 +38,8 @@
     },
     "scripts": {
         "lint": "eslint .",
-        "dev": "./bin/vd"
+        "dev": "./bin/vd",
+        "pub": "npm publish --access=public"
     },
     "devDependencies": {
         "eslint": "^5.7.0"
