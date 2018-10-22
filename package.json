@@ -1,7 +1,7 @@
 {
     "name": "js-vd",
     "description": "Visualize your CommonJS, AMD, or ES6 module dependencies.",
-      "keywords": [
+    "keywords": [
         "visualize",
         "dependencies",
         "AMD",
@@ -12,7 +12,7 @@
         "module",
         "dependency",
         "es6"
-      ],
+    ],
     "version": "0.2.8",
     "homepage": "https://github.com/freizl/js-vd",
     "author": {
@@ -37,15 +37,14 @@
         "node": ">= 0.8.0"
     },
     "scripts": {
-        "test": "grunt nodeunit"
+        "dev": "./bin/vd"
     },
-    "devDependencies": {
-    },
+    "devDependencies": {},
     "dependencies": {
         "commander": "^2.8.0",
-        "madge": "^0.5.0",
-        "mustache": "^2.0.0",
-        "ramda": "^0.13.0"
+        "madge": "^3.2.0",
+        "mustache": "^3.0.0",
+        "ramda": "^0.25.0"
     },
     "bin": {
         "vd": "bin/vd"

@@ -34,10 +34,13 @@ then open the result html
 Type `vd --help` or [view the source](https://github.com/freizl/js-vd/blob/master/bin/vd) for the many options like `--exclude` and `--dot`.
 
 ## Contributing
+
 - Feel free to submit PR
 
 ## TODO
-- unit test
+
+- [ ] eslint
+- [ ] unit test
 
 ## License
 
