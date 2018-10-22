@@ -37,9 +37,12 @@
         "node": ">= 0.8.0"
     },
     "scripts": {
+        "lint": "eslint .",
         "dev": "./bin/vd"
     },
-    "devDependencies": {},
+    "devDependencies": {
+        "eslint": "^5.7.0"
+    },
     "dependencies": {
         "commander": "^2.8.0",
         "madge": "^3.2.0",
