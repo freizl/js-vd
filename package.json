@@ -1,56 +1,56 @@
 {
-    "name": "@freizl/jsvd",
-    "description": "Visualize your CommonJS, AMD, or ES6 module dependencies.",
-    "keywords": [
-        "visualize",
-        "dependencies",
-        "AMD",
-        "RequireJS",
-        "require",
-        "graph",
-        "commonjs",
-        "module",
-        "dependency",
-        "es6"
-    ],
-    "version": "1.0.0",
-    "homepage": "https://github.com/freizl/js-vd",
-    "author": {
-        "name": "Haisheng.Wu",
-        "email": "freizl@gmail.com"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/freizl/js-vd.git"
-    },
-    "bugs": {
-        "url": "https://github.com/freizl/js-vd/issues"
-    },
-    "licenses": [
-        {
-            "type": "MIT",
-            "url": "https://github.com/freizl/js-vd/blob/master/LICENSE-MIT"
-        }
-    ],
-    "main": "lib/index",
-    "engines": {
-        "node": ">= 0.8.0"
-    },
-    "scripts": {
-        "lint": "eslint .",
-        "dev": "./bin/jsvd",
-        "pub": "npm publish --access=public"
-    },
-    "devDependencies": {
-        "eslint": "^6.7.1"
-    },
-    "dependencies": {
-        "commander": "^4.0.1",
-        "madge": "^3.6.0",
-        "mustache": "^3.1.0",
-        "ramda": "^0.26.1"
-    },
-    "bin": {
-        "vd": "bin/jsvd"
+  "name": "@freizl/jsvd",
+  "description": "Visualize your CommonJS, AMD, or ES6 module dependencies.",
+  "keywords": [
+    "visualize",
+    "dependencies",
+    "AMD",
+    "RequireJS",
+    "require",
+    "graph",
+    "commonjs",
+    "module",
+    "dependency",
+    "es6"
+  ],
+  "version": "1.1.0",
+  "homepage": "https://github.com/freizl/js-vd",
+  "author": {
+    "name": "Haisheng.Wu",
+    "email": "freizl@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/freizl/js-vd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/freizl/js-vd/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/freizl/js-vd/blob/master/LICENSE-MIT"
     }
+  ],
+  "main": "lib/index",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "dev": "./bin/jsvd",
+    "pub": "npm publish --access=public"
+  },
+  "devDependencies": {
+    "eslint": "^6.7.1"
+  },
+  "dependencies": {
+    "commander": "^4.0.1",
+    "madge": "^3.6.0",
+    "mustache": "^3.1.0",
+    "ramda": "^0.26.1"
+  },
+  "bin": {
+    "vd": "bin/jsvd"
+  }
 }
