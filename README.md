@@ -22,15 +22,15 @@ Install the module with: `npm install -g @freizl/jsvd`
 
 Or generate for your own project
 
-- `vd -f amd /path/to/project/source > index.html`
-- `vd /path/to/express/project > index.html`
-- `vd -f amd -d some/module/name /path/to/project/source > index.html`
+- `jsvd -f amd /path/to/project/source > index.html`
+- `jsvd -b /path/to/express/project > index.html`
+- `jsvd -f amd -d some/module/name -b /path/to/project/source > index.html`
 
 then open the result html
 
 ## Options
 
-Type `vd --help` or [view the source](https://github.com/freizl/js-vd/blob/master/bin/vd) for the many options like `--exclude` and `--dot`.
+Type `jsvd --help` or [view the source](https://github.com/freizl/js-vd/blob/master/bin/vd) for the many options like `--exclude` and `--dot`.
 
 ## Contributing
 
