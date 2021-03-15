@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "commander": "^4.0.1",
-    "madge": "^3.6.0",
+    "madge": "^4.0.1",
     "mustache": "^3.1.0",
     "ramda": "^0.26.1"
   },
