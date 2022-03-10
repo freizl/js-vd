@@ -31,6 +31,10 @@
       "url": "https://github.com/freizl/js-vd/blob/master/LICENSE-MIT"
     }
   ],
+  "engines": {
+    "npm": "~8.5",
+    "node": "16"
+  },
   "main": "lib/index",
   "engines": {
     "node": ">= 0.8.0"
