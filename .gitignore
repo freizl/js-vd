@@ -3,3 +3,4 @@ node_modules
 _index.html
 .tern-port
 npm-debug.log
+*.tgz

@@ -1,2 +1,6 @@
 test/
+examples
 _index.html
+*.tgz
+.eslintignore
+.eslintrc.js
