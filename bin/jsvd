@@ -2,33 +2,29 @@
 
 'use strict';
 
-/**
- * Module dependencies
- */
-var fs = require('fs'),
-    version = require('../package.json').version,
-    program = require('commander'),
-    madge = require('madge'),
-    R = require('ramda'),
-    jsvd = require('../lib');
+const fs = require('fs');
+const version = require('../package.json').version;
+const { program } = require('commander');
+const madge = require('madge');
+const R = require('ramda');
+const jsvd = require('../lib');
 
 
 program
-	.version(version)
-	.usage('[options] <src...>')
-	.option('-b, --basedir <path>', 'base directory for resolving paths')
-	.option('-d, --depends <name>', 'show module dependents')
-	.option('-x, --exclude <regexp>', 'exclude modules using RegExp')
-	.option('--require-config <file>', 'path to RequireJS config')
-	.option('--webpack-config <file>', 'path to webpack config')
-	.option('--include-npm', 'include shallow NPM modules', true)
-	// .option('-c, --circular', 'show circular dependencies')
-	// .option('-j, --json', 'output as JSON')
-	// .option('--orphans', 'show modules that no one is depending on', true)
-	.parse(process.argv);
+    .version(version)
+    .usage('[options] <src...>')
+    .option('-b, --basedir <path>', 'base directory for resolving paths')
+    .option('-d, --depends <name>', 'show module dependents')
+    .option('-x, --exclude <regexp>', 'exclude modules using RegExp')
+    .option('--require-config <file>', 'path to RequireJS config')
+    .option('--webpack-config <file>', 'path to webpack config')
+    .option('--include-npm', 'include shallow NPM modules', true)
+    .option('-c, --circular', 'show circular dependencies')
+    .option('--orphans', 'show modules that no one is depending on', true)
+    .parse(process.argv);
 
-const options = R.pick([], program);
-   madge(program.basedir, options)
+const options = program.opts();
+madge(options.basedir, options)
    .then((res) => {
      jsvd(res.obj(), program);
    });

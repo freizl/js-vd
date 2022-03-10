@@ -42,13 +42,13 @@
     "pub": "npm publish --access=public"
   },
   "devDependencies": {
-    "eslint": "^6.7.1"
+    "eslint": "^8.10.0"
   },
   "dependencies": {
-    "commander": "^4.0.1",
+    "commander": "^9.0.0",
     "madge": "^4.0.1",
-    "mustache": "^3.1.0",
-    "ramda": "^0.26.1"
+    "mustache": "^4.2.0",
+    "ramda": "^0.28.0"
   },
   "bin": {
     "vd": "bin/jsvd"
