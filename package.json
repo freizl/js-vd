@@ -47,10 +47,10 @@
     "eslint": "^8.10.0"
   },
   "dependencies": {
-    "commander": "^9.0.0",
-    "madge": "^4.0.1",
+    "commander": "^10.0.0",
+    "madge": "^6.1.0",
     "mustache": "^4.2.0",
-    "ramda": "^0.28.0"
+    "ramda": "^0.29.0"
   },
   "bin": {
     "vd": "bin/jsvd"
